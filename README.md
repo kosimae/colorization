@@ -11,3 +11,9 @@
 - colab에서 cnn 예제 실행
 - 201219 폴더에 코드 첨부
 - 첨부한 코드는 google colab을 사용하여 실행
+
+
+계획
+- colab에서 다운로드 받은 파일의 위치 알아보기
+- colab에서 학습한 model의 위치 알아보기
+- 학습한 model을 바탕으로 predict하는 함수 
