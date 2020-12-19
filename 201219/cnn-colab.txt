@@ -1,0 +1,79 @@
+import tensorflow as tf
+
+from tensorflow.keras import datasets, layers, models
+import matplotlib.pyplot as plt
+
+# CIRAR10 데이터 세트에는 10개의 클래스에 60,000개의 컬러 이미지가 포함되어 있다.
+# 데이터 세트는 50,000개의 학습 이미지와 10,000개의 테스트 이미지로 나뉘어 있다.
+# 클래스는 상호 배타적이며 중복되지 않는다.
+# CIRAR10 데이터 세트 다운로드
+(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
+
+# Normalize pixel values to be between 0 and 1
+# 0과 1 사이의 값으로 value을 normalization
+# pixel은 0~255 사이의 값을 가지므로 255로 나눈다.
+train_images, test_images = train_images / 255.0, test_images / 255.0
+
+# 10개의 class name 지정
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
+               'dog', 'frog', 'horse', 'ship', 'truck']
+
+# Figure size 720x720
+plt.figure(figsize=(10,10))
+
+# data set에서 25개의 image을 출력
+for i in range(25):
+    # 가로 5, 세로 5의 정사각형 표를 출력
+    plt.subplot(5,5,i+1)
+    
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    
+    # image 출력
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+    # The CIFAR labels happen to be arrays, 
+    # which is why you need the extra index
+
+    # image의 class name을 출력
+    plt.xlabel(class_names[train_labels[i][0]])
+plt.show()
+
+# cnn model을 생성
+model = models.Sequential()
+model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+
+# model 정보 출력
+model.summary()
+
+# model에 flatten와 dense을 추가
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(10))
+
+# model 정보 출력
+model.summary()
+
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+# model 학습
+history = model.fit(train_images, train_labels, epochs=10, 
+                    validation_data=(test_images, test_labels))
+
+# 그래프 출력
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.xlabel('Epoch')     # 가로축
+plt.ylabel('Accuracy')  # 세로축
+plt.ylim([0.5, 1])      # 세로축 범위
+plt.legend(loc='lower right')
+
+test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+
+print(test_acc)
