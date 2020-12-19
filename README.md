@@ -7,4 +7,7 @@
 - 001부터 300까지 300개의 image을 training set으로 사용하고 301부터 400까지 100개의 image을 validation set으로 사용
 - 프레임워크는 Google Colab을 사용
 
-
+2020년 12월 19일 토요일
+- colab에서 cnn 예제 실행
+- 201219 폴더에 코드 첨부
+- 첨부한 코드는 google colab을 사용하여 실행
