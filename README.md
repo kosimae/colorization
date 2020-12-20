@@ -12,6 +12,9 @@
 - 201219 폴더에 코드 첨부
 - 첨부한 코드는 google colab을 사용하여 실행
 
+2020년 12월 20일 일요일
+- Colab에서 Google drive mount
+- Colab에서 학습한 model 저장 (checkpoint)
 
 계획
 - colab에서 다운로드 받은 파일의 위치 알아보기
