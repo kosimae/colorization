@@ -1,0 +1,15 @@
+# 참고한 사이트 https://blog.naver.com/wideeyed/221564411127
+from os import path
+from google.colab import drive
+
+notebooks_dir_name = 'notebooks'
+drive.mount("/content/gdrive")
+notebooks_base_dir = path.join('./gdrive/MyDrive', notebooks_dir_name)
+if not path.exists(notebooks_base_dir):
+  print("Check your google drive directory. See you file explorer")
+
+with open(path.join(notebooks_base_dir, "myfile.txt"), "w") as f:
+  f.write("Google Colab is good!!!")
+
+# drive.mount() 함수를 실행하면 colab에서 링크가 나오고 링크를 클릭한 후 나오는 코드를 빈칸에 입력
+# 위의 함수가 종료되면 colab 좌측의 폴더의 drive 폴더가 생성되고 경로를 따라가면 myfile.txt가 생성되어 있음

@@ -1,0 +1,61 @@
+import os
+
+import tensorflow as tf
+from tensorflow import keras
+
+from os import path
+from google.colab import drive
+
+# Google 드라이버 mount
+notebooks_dir_name = 'notebooks'
+drive.mount("/content/gdrive")
+notebooks_base_dir = path.join('./gdrive/MyDrive', notebooks_dir_name)
+
+if not path.exists(notebooks_base_dir):
+  print("Check your google drive directory. See you file explorer")
+
+# 간단한 Sequential 모델을 정의
+def create_model():
+  model = tf.keras.models.Sequential([
+    keras.layers.Dense(512, activation='relu', input_shape=(2,)),	# dim = 2	
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(10)
+  ])
+
+  model.compile(optimizer='adam',
+                loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
+                metrics=['accuracy'])
+
+  return model
+
+# 모델 객체를 만듭니다
+model = create_model()
+
+# 저장할 가중치 파일의 경로
+checkpoint_path = notebooks_base_dir+"/xor_training/cp.ckpt"
+print(checkpoint_path)
+
+checkpoint_dir = os.path.dirname(checkpoint_path)
+
+# 학습할 데이터. x는 input, y는 output(기댓값)
+x = [[0, 0], [0, 1], [1, 0], [1, 1]]
+y = [[0], [1], [1], [0]]
+
+# validation
+xx = [[0, 0]]	
+yy = [[0]]
+
+# callback 함수 
+cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=1)
+
+# 학습 진행 epochs의 수만큼 학습 진행 
+model.fit(x, y, epochs=100, validation_data=(xx, yy), callbacks=[cp_callback])
+
+# 결과 출력
+# [0, 1, 1, 0]이 출력
+print(model.predict_classes(x))
+
+test = [[0, 1]]
+print(model.predict_classes(test))
