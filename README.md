@@ -19,16 +19,8 @@
 - Python에서 tensorflow을 사용하여 model 생성
   - xor 연산을 학습하여 checkpoint로 가중치 파일 생성
   - predict 함수를 사용하여 연산 결과 출력
- - 학습한 가중치 파일을 Google drive에 
+  - 학습한 가중치 파일을 Google drive에 저장 
 
-
-
-
-
-- Colab에서 Google drive mount
-- Colab에서 학습한 model 저장 (checkpoint)
-
-계획
-- colab에서 다운로드 받은 파일의 위치 알아보기
-- colab에서 학습한 model의 위치 알아보기
-- 학습한 model을 바탕으로 predict하는 함수 
+앞으로 진행할 사항
+  - cnn에서 model 학습 데이터 저장 및 불러오기
+  - colorization 이론 정립
