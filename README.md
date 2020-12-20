@@ -14,6 +14,8 @@
 
 2020년 12월 20일 일요일
 - Colab에서 Google drive mount
+- https://blog.naver.com/wideeyed/221564411127
+
 - Python에서 tensorflow을 사용하여 model 생성
   - xor 연산을 학습하여 checkpoint로 가중치 파일 생성
   - predict 함수를 사용하여 연산 결과 출력
