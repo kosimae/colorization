@@ -1,0 +1,109 @@
+# https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/images/cnn.ipynb#scrollTo=MdDzI75PUXrG
+import tensorflow as tf
+
+from tensorflow.keras import datasets, layers, models
+import matplotlib.pyplot as plt
+
+# 60,000개의 data 다운로드
+(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
+
+# Normalize pixel values to be between 0 and 1
+train_images, test_images = train_images / 255.0, test_images / 255.0
+
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
+               'dog', 'frog', 'horse', 'ship', 'truck']
+
+py = 5
+px = 5
+plt.figure(figsize=(px,py))
+for i in range(px*py):
+    plt.subplot(px,py,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(train_images[i], cmap=plt.cm.binary)
+    # The CIFAR labels happen to be arrays, 
+    # which is why you need the extra index
+    plt.xlabel(class_names[train_labels[i][0]])
+plt.show()
+
+model = models.Sequential()
+model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+
+model.summary()
+
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(10))
+
+model.summary()
+
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+history = model.fit(train_images, train_labels, epochs=10, 
+                    validation_data=(test_images, test_labels))
+
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0.5, 1])
+plt.legend(loc='lower right')
+
+test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+
+# 10번 학습했을 때 0.7
+# 30번 학습했을 때 0.69
+print(test_acc)
+
+# google drive에 저장
+from os import path
+from google.colab import drive
+
+# 출력되는 페이지로 들어가서 코드 입력
+notebooks_dir_name = 'notebooks'
+drive.mount("/content/gdrive")
+notebooks_base_dir = path.join('./gdrive/MyDrive', notebooks_dir_name)
+
+if not path.exists(notebooks_base_dir):
+  print("Check your google drive directory. See you file explorer")
+
+model_path = notebooks_base_dir+"/cnn2/checkpoint"
+print(model_path)
+
+model.save_weights(model_path)
+
+plt.figure(figsize=(10,10))
+for i in range(25):
+    plt.subplot(5,5,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(test_images[i], cmap=plt.cm.binary)
+    # The CIFAR labels happen to be arrays, 
+    # which is why you need the extra index
+    plt.xlabel(class_names[test_labels[i][0]])
+plt.show()
+
+test_predict = model.predict(test_images)
+print(test_predict)
+
+test_predict_class = model.predict_classes(test_images)
+print(test_predict_class)
+cnt=0
+for i in range(10000):
+  if (test_labels[i] != test_predict_class[i]):
+    cnt = cnt+1
+
+# 10000개의 test sample에 대해서 정확도가 69%
+print(100-(cnt/10000*100))
+
+#for i in range(25):
+#  print(test_labels[i])
+#  print(test_predict_class[i])
