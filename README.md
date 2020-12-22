@@ -21,6 +21,10 @@
   - predict 함수를 사용하여 연산 결과 출력
   - 학습한 가중치 파일을 Google drive에 저장 
 
+2020년 12월 22일 화요일
+- 12월 19일에 돌린 예제 코드에서 학습한 model에서 predict 실행
+
+
 앞으로 진행할 사항
   - cnn에서 model 학습 데이터 저장 및 불러오기
   - colorization 이론 정립
