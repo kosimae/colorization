@@ -27,6 +27,15 @@
 - 10번 학습했을 때와 30번 학습했을 때 정확도의 차이가 거의 없음
 - model의 구조를 다르게 해볼 
 
+2020년 12월 23일 수요일
+- Grayscale에 대해서 10번, 30번 학습한 후 정확도 비교
+- 10,000개의 test_images에 대해서 10번 학습했을 때 67.27, 30번 학습했을 때 65.71의 정확도가 나타남
+- 여러 번 학습해도 정확도가 올라가지 않고 오히려 낮아짐
+- image colorization을 검색하여 colab에서 실행
+- 참고한 사이트 https://colab.research.google.com/github/smartgeometry-ucl/dl4g/blob/master/colorization.ipynb#scrollTo=urXwm66b2vhX
+- 
+
+
 앞으로 진행할 사항
   - cnn에서 model 학습 데이터 저장 및 불러오기
   - colorization 이론 정립
