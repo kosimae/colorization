@@ -33,7 +33,7 @@
 - 여러 번 학습해도 정확도가 올라가지 않고 오히려 낮아짐
 - image colorization을 검색하여 colab에서 실행
 - 참고한 사이트 https://colab.research.google.com/github/smartgeometry-ucl/dl4g/blob/master/colorization.ipynb#scrollTo=urXwm66b2vhX
-- 
+[re-colored](./201223/re-colored.png)
 
 
 앞으로 진행할 사항
