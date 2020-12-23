@@ -1,0 +1,106 @@
+# https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/images/cnn.ipynb#scrollTo=MdDzI75PUXrG
+import tensorflow as tf
+
+from tensorflow.keras import datasets, layers, models
+import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
+import os
+import cv2
+
+from os import path
+from google.colab import drive
+
+# 출력되는 페이지로 들어가서 코드 입력
+notebooks_dir_name = 'notebooks'
+drive.mount("/content/gdrive")
+notebooks_base_dir = path.join('./gdrive/MyDrive', notebooks_dir_name)
+
+if not path.exists(notebooks_base_dir):
+  print("Check your google drive directory. See you file explorer")
+
+model_path = notebooks_base_dir+"/images.jpg"
+print(model_path)
+
+# 60,000개의 data 다운로드
+(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
+
+# Normalize pixel values to be between 0 and 1
+train_images, test_images = train_images / 255.0, test_images / 255.0
+
+def rgb2gray(rgb):
+  r = rgb[:, :, 0]
+  g = rgb[:, :, 1]
+  b = rgb[:, :, 2]
+  gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
+  
+  return gray
+
+gray_train_images = np.zeros((50000, 32, 32, 1))
+for i in range(len(train_images)):
+  gray_train_images[i, :, :, 0] = rgb2gray(train_images[i])
+
+gray_test_images = np.zeros((10000, 32, 32, 1))
+for i in range(len(test_images)):
+  gray_test_images[i, :, :, 0] = rgb2gray(test_images[i])
+
+py = 5
+px = 5
+plt.figure(figsize=(px,py))
+for i in range(px*py):
+    plt.subplot(px,py,i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(gray_train_images[i, :, :, 0], cmap=plt.cm.binary)
+    # The CIFAR labels happen to be arrays, 
+    # which is why you need the extra index
+    plt.xlabel(class_names[train_labels[i][0]])
+plt.show()
+
+model = models.Sequential()
+model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 1)))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(layers.MaxPooling2D((2, 2)))
+model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+
+# model.summary()
+
+model.add(layers.Flatten())
+model.add(layers.Dense(64, activation='relu'))
+model.add(layers.Dense(10))
+
+model.summary()
+
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+history = model.fit(gray_train_images, train_labels, epochs=30, 
+                    validation_data=(gray_test_images, test_labels))
+
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0.5, 1])
+plt.legend(loc='lower right')
+
+test_loss, test_acc = model.evaluate(gray_test_images,  test_labels, verbose=2)
+
+test_predict = model.predict(gray_test_images)
+#print(test_predict)
+
+test_predict_class = model.predict_classes(gray_test_images)
+#print(test_predict_class)
+cnt=0
+for i in range(10000):
+  if (test_labels[i] != test_predict_class[i]):
+    cnt = cnt+1
+
+# 10000개의 test sample에 대해서 정확도가 69%
+print(100-(cnt/10000*100))
+
+# gray로 10번 학습 67.27
+# gray로 30번 학습 65.71
