@@ -35,7 +35,9 @@
 - 참고한 사이트 https://colab.research.google.com/github/smartgeometry-ucl/dl4g/blob/master/colorization.ipynb#scrollTo=urXwm66b2vhX
 ![re-colored](./201223/re-colored.png )
 
+- 사이트에 제공된 코드를 colab에서 실행했을 때 위와 같은 결과를 얻을 수 있었음
+- model을 저장하는 방법과 사진을 각각 predict 하는 방법을 알아볼 필요가 있음
+
 
 앞으로 진행할 사항
-  - cnn에서 model 학습 데이터 저장 및 불러오기
-  - colorization 이론 정립
+- 예제에서 실행한 cnn 코드를 응용하여 colorization model 학습하기
