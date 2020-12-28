@@ -40,7 +40,8 @@
 
 2020년 12월 28일 월요일
 - 인공지능개론 강의 시간에 배운 torch을 사용한 cnn 코드 실행
-- 코드는 추후에 
+![Accuracy_2](./201228/AI_CNN_2.png )
+![Accuracy_10](./201228/AI_CNN_10.png )
 
 앞으로 진행할 사항
 - 예제에서 실행한 cnn 코드를 응용하여 colorization model 학습하기
